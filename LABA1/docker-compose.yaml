@@ -1,0 +1,35 @@
+services:
+  ollama:
+    container_name: ollama
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    ports:
+      - "11434:11434"       # опционально, если хочешь дёргать Ollama напрямую с хоста
+    volumes:
+      - ollama_data:/root/.ollama
+    # если есть NVIDIA GPU:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  agentgateway:
+    container_name: agentgateway
+    image: cr.agentgateway.dev/agentgateway:v1.1.0
+    restart: unless-stopped
+    depends_on:
+      - ollama
+    ports:
+      - "3000:3000"
+      - "15000:15000"
+    volumes:
+      - ./config.yaml:/config.yaml:ro
+    environment:
+      - ADMIN_ADDR=0.0.0.0:15000
+    command: ["-f", "/config.yaml"]
+
+volumes:
+  ollama_data:
