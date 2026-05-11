@@ -39,7 +39,7 @@ curl http://localhost:11434/api/tags
 }
 ```
 
-![Ollama запущено](assets/responce.png)
+![Ollama запущено](assets/run.png)
 
 ---
 
