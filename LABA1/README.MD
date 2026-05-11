@@ -79,7 +79,6 @@ curl http://localhost:3000/v1/chat/completions/v1/chat/completions \
   }'
 ```
 
-Очікувана відповідь — JSON з полем `choices[0].message.content`.
 
 ![Успішна відповідь від AgentGateway](assets/response.png)
 
@@ -131,8 +130,11 @@ volumes:
 docker compose up -d
 docker compose logs -f
 ```
-
 ---
+
+## 5. Вебка
+![Успішна відповідь від AgentGateway](assets/ui.png)
+
 
 ## Структура репозиторію
 
