@@ -110,9 +110,6 @@ kubectl apply -f mcp_and_agent.yaml
 ## 5.Робота декларативного агента.
 ![Успішна відповідь від AgentGateway](assets/kagent-2.png)
 
-## 5.Робота декларативного агента.
+## 5.TOP.
 ![Успішна відповідь від AgentGateway](assets/ui.png)
-
-## 5.Робота декларативного агента.
-![Успішна відповідь від AgentGateway](assets/top.png)
 
