@@ -1,0 +1,44 @@
+apiVersion: kagent.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: mcp-filesystem
+  namespace: kagent
+spec:
+  deployment:
+    cmd: npx
+    args:
+      - -y
+      - "@modelcontextprotocol/server-filesystem"
+      - /tmp
+    port: 3001
+  transportType: stdio
+  stdioTransport: {}
+---
+apiVersion: kagent.dev/v1alpha2
+kind: Agent
+metadata:
+  name: filesystem-agent
+  namespace: kagent
+spec:
+  description: Агент для рoботы з файловою системою
+  type: Declarative
+  declarative:
+    modelConfig: ollama-config
+    systemMessage: |-
+      You are a helpful assistant that can read and manage files.
+      Format responses as Markdown.
+    tools:
+      - type: McpServer
+        mcpServer:
+          name: mcp-filesystem
+          kind: MCPServer
+          toolNames:
+            - list_directory
+            - read_file
+            - write_file
+            - create_directory
+            - delete_file
+            - move_file
+            - search_files
+            - get_file_info
+
