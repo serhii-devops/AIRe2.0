@@ -102,6 +102,7 @@ ollama list
 ollama ps
 
 kubectl apply -f mcp_and_agent.yaml
+```
 
 ## 5.Запуск декларативного агента.
 ![Успішна відповідь від AgentGateway](assets/kagent-1.png)
@@ -114,5 +115,4 @@ kubectl apply -f mcp_and_agent.yaml
 
 ## 5.Робота декларативного агента.
 ![Успішна відповідь від AgentGateway](assets/top.png)
-
 
