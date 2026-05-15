@@ -85,11 +85,6 @@ http://SERVER_IP:8080
 11. Recommended kernel tuning
 
 
-![Ollama запущено](assets/kagent-1.png)
-![Ollama запущено](assets/top.png)
-![Ollama запущено](assets/kagent-2.png)
-![Ollama запущено](assets/ui.png)
-
 Increase inotify limits to avoid watcher issues.
 
 sudo sysctl fs.inotify.max_user_instances=8192
@@ -107,3 +102,17 @@ ollama list
 ollama ps
 
 kubectl apply -f mcp_and_agent.yaml
+
+## 5.Запуск декларативного агента.
+![Успішна відповідь від AgentGateway](assets/kagent-1.png)
+
+## 5.Робота декларативного агента.
+![Успішна відповідь від AgentGateway](assets/kagent-2.png)
+
+## 5.Робота декларативного агента.
+![Успішна відповідь від AgentGateway](assets/ui.png)
+
+## 5.Робота декларативного агента.
+![Успішна відповідь від AgentGateway](assets/top.png)
+
+
