@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "a2a-agent.fullname" . }}
+  annotations:
+    # cert-manager автоматически выпустит сертификат
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # Важно: well-known path не должен редиректиться с trailing slash
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- if .Values.ingress.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host }}
+      secretName: {{ .Values.ingress.tls.secretName }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          # /.well-known/* — обязательно без redirect
+          - path: /.well-known/(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ include "a2a-agent.fullname" . }}
+                port:
+                  number: 80
+          # Основной A2A endpoint
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "a2a-agent.fullname" . }}
+                port:
+                  number: 80
