@@ -43,16 +43,7 @@ subjects:
     name: sre-agent
     namespace: kagent-system
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: sre-agent-config
-  namespace: kagent-system
-data:
-  OLLAMA_BASE_URL: "http://ollama.kagent-system.svc.cluster.local:11434"
-  OLLAMA_MODEL: "llama3"
-  OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger-collector.observability.svc.cluster.local:4317"
----
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -79,7 +70,7 @@ spec:
       serviceAccountName: sre-agent
       containers:
         - name: agent
-          image: sre-agent:latest
+          image: serhii1121/myapp:25
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

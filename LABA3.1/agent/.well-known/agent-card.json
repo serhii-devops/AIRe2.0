@@ -1,0 +1,197 @@
+{
+  "$schema": "https://a2a.google/schemas/agent-card/v1",
+  "name": "SRE Kubernetes Agent",
+  "description": "AI-powered Site Reliability Engineering agent for Kubernetes cluster management, monitoring, and incident response",
+  "version": "1.0.0",
+  "capabilities": {
+    "streaming": true,
+    "async": true,
+    "observability": {
+      "traces": true,
+      "metrics": true,
+      "logs": true
+    }
+  },
+  "endpoints": {
+    "agent": "http://sre-agent.default.svc.cluster.local:8080/v1/agent",
+    "health": "http://sre-agent.default.svc.cluster.local:8080/health",
+    "metrics": "http://sre-agent.default.svc.cluster.local:8080/metrics"
+  },
+  "tools": [
+    {
+      "name": "kubectl_get",
+      "description": "Get Kubernetes resources (pods, deployments, services, etc.)",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "resource_type": {
+            "type": "string",
+            "description": "Type of resource (pod, deployment, service, etc.)"
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Kubernetes namespace",
+            "default": "default"
+          },
+          "name": {
+            "type": "string",
+            "description": "Resource name (optional, omit for all resources)"
+          }
+        },
+        "required": ["resource_type"]
+      }
+    },
+    {
+      "name": "kubectl_describe",
+      "description": "Describe Kubernetes resource in detail",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "resource_type": {
+            "type": "string",
+            "description": "Type of resource"
+          },
+          "name": {
+            "type": "string",
+            "description": "Resource name"
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Kubernetes namespace",
+            "default": "default"
+          }
+        },
+        "required": ["resource_type", "name"]
+      }
+    },
+    {
+      "name": "kubectl_logs",
+      "description": "Get logs from a pod",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pod_name": {
+            "type": "string",
+            "description": "Pod name"
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Kubernetes namespace",
+            "default": "default"
+          },
+          "container": {
+            "type": "string",
+            "description": "Container name (optional)"
+          },
+          "tail": {
+            "type": "integer",
+            "description": "Number of lines to tail",
+            "default": 100
+          }
+        },
+        "required": ["pod_name"]
+      }
+    },
+    {
+      "name": "kubectl_apply",
+      "description": "Apply Kubernetes manifest",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "manifest": {
+            "type": "string",
+            "description": "YAML manifest content"
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Kubernetes namespace",
+            "default": "default"
+          }
+        },
+        "required": ["manifest"]
+      }
+    },
+    {
+      "name": "kubectl_delete",
+      "description": "Delete Kubernetes resource",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "resource_type": {
+            "type": "string",
+            "description": "Type of resource"
+          },
+          "name": {
+            "type": "string",
+            "description": "Resource name"
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Kubernetes namespace",
+            "default": "default"
+          }
+        },
+        "required": ["resource_type", "name"]
+      }
+    },
+    {
+      "name": "analyze_cluster_health",
+      "description": "Analyze overall cluster health and resource utilization",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "include_metrics": {
+            "type": "boolean",
+            "description": "Include detailed metrics",
+            "default": true
+          }
+        }
+      }
+    },
+    {
+      "name": "diagnose_pod_issues",
+      "description": "Diagnose common pod issues (CrashLoopBackOff, ImagePullBackOff, etc.)",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pod_name": {
+            "type": "string",
+            "description": "Pod name"
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Kubernetes namespace",
+            "default": "default"
+          }
+        },
+        "required": ["pod_name"]
+      }
+    },
+    {
+      "name": "check_resource_quotas",
+      "description": "Check resource quotas and limits in namespace",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "namespace": {
+            "type": "string",
+            "description": "Kubernetes namespace",
+            "default": "default"
+          }
+        }
+      }
+    }
+  ],
+  "authentication": {
+    "type": "bearer",
+    "description": "Bearer token authentication using Kubernetes ServiceAccount"
+  },
+  "metadata": {
+    "author": "SRE Team",
+    "license": "Apache-2.0",
+    "tags": ["kubernetes", "sre", "monitoring", "incident-response"],
+    "llm_backend": "ollama",
+    "supported_models": ["llama3", "mistral", "codellama"],
+    "observability_backend": "opentelemetry"
+  }
+}
