@@ -1,0 +1,150 @@
+apiVersion: kagent.dev/v1alpha1
+kind: Agent
+metadata:
+  name: sre-kubernetes-agent
+  namespace: kagent-system
+  labels:
+    kagent.dev/type: sre
+    kagent.dev/protocol: a2a
+spec:
+  # Agent metadata
+  displayName: "SRE Kubernetes Agent"
+  description: "AI-powered Site Reliability Engineering agent for Kubernetes cluster management"
+  version: "1.0.0"
+
+  # LLM backend configuration
+  llm:
+    provider: ollama
+    endpoint: "http://ollama.kagent-system.svc.cluster.local:11434"
+    model: "llama3"
+    temperature: 0.7
+    maxTokens: 2048
+
+  # A2A Protocol configuration
+  protocol:
+    type: a2a
+    version: "1.0"
+    agentCard:
+      wellKnownUri: "/.well-known/agent-card.json"
+      autoDiscovery: true
+
+  # Service configuration
+  service:
+    name: sre-agent
+    port: 8080
+    endpoints:
+      agent: "/v1/agent"
+      health: "/health"
+      metrics: "/metrics"
+      agentCard: "/.well-known/agent-card.json"
+
+  # Capabilities
+  capabilities:
+    streaming: true
+    async: true
+    toolUse: true
+    observability:
+      traces: true
+      metrics: true
+      logs: true
+
+  # Tools available to the agent
+  tools:
+    - name: kubectl_get
+      enabled: true
+      description: "Get Kubernetes resources"
+    - name: kubectl_describe
+      enabled: true
+      description: "Describe Kubernetes resources in detail"
+    - name: kubectl_logs
+      enabled: true
+      description: "Get pod logs"
+    - name: kubectl_apply
+      enabled: true
+      description: "Apply Kubernetes manifests"
+      requiresApproval: true
+    - name: kubectl_delete
+      enabled: true
+      description: "Delete Kubernetes resources"
+      requiresApproval: true
+    - name: analyze_cluster_health
+      enabled: true
+      description: "Analyze overall cluster health"
+    - name: diagnose_pod_issues
+      enabled: true
+      description: "Diagnose pod issues"
+    - name: check_resource_quotas
+      enabled: true
+      description: "Check resource quotas"
+
+  # Observability configuration
+  observability:
+    traces:
+      enabled: true
+      exporter: otlp
+      endpoint: "http://jaeger-collector.observability.svc.cluster.local:4317"
+      samplingRate: 1.0
+    metrics:
+      enabled: true
+      exporter: prometheus
+      port: 8080
+      path: "/metrics"
+    logs:
+      enabled: true
+      level: info
+
+  # Security and RBAC
+  security:
+    serviceAccount: sre-agent
+    rbac:
+      enabled: true
+      clusterRole: sre-agent-role
+    authentication:
+      type: bearer
+      tokenSource: serviceAccount
+
+  # Resource limits
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+  # Deployment configuration
+  deployment:
+    replicas: 1
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 0
+        maxSurge: 1
+    image:
+      repository: sre-agent
+      tag: latest
+      pullPolicy: IfNotPresent
+
+  # Agent behavior
+  behavior:
+    systemPrompt: |
+      You are an SRE (Site Reliability Engineering) agent for Kubernetes clusters.
+      You have access to kubectl commands and cluster analysis tools.
+      When users ask about cluster issues, use the available tools to diagnose and provide solutions.
+      Always explain your reasoning and provide actionable recommendations.
+
+      Key responsibilities:
+      - Monitor cluster health and resource utilization
+      - Diagnose and troubleshoot pod/deployment issues
+      - Analyze logs and events for root cause analysis
+      - Recommend best practices for reliability and performance
+      - Assist with incident response and remediation
+
+    conversationHistory:
+      enabled: true
+      maxMessages: 20
+
+    rateLimiting:
+      enabled: true
+      requestsPerMinute: 60
+      burstSize: 10
