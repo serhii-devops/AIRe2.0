@@ -35,6 +35,16 @@ spec:
           env:
             - name: AGENT_BASE_URL
               value: "http://sre-agent.default.svc.cluster.local"
+            - name: OTEL_ENABLED
+              value: "true"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://otel-collector.monitoring.svc.cluster.local:4317"
+            - name: SERVICE_NAME
+              value: "sre-k8s-agent"
+            - name: SERVICE_VERSION
+              value: "1.0.0"
+            - name: ENVIRONMENT
+              value: "production"
 
           resources:
             requests:
@@ -46,14 +56,14 @@ spec:
 
           livenessProbe:
             httpGet:
-              path: /health
+              path: /health/live
               port: 8080
             initialDelaySeconds: 10
             periodSeconds: 30
 
           readinessProbe:
             httpGet:
-              path: /health
+              path: /health/ready
               port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10

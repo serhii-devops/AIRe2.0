@@ -1,0 +1,20 @@
+# k8s/servicemonitor.yaml
+# ServiceMonitor для автоматического скрейпинга метрик Prometheus
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sre-agent
+  namespace: default
+  labels:
+    app: sre-agent
+    prometheus: kube-prometheus
+spec:
+  selector:
+    matchLabels:
+      app: sre-agent
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
+      scrapeTimeout: 10s
+      scheme: http

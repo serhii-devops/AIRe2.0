@@ -1,0 +1,21 @@
+apiVersion: agentregistry.dev/v1alpha1
+kind: DiscoveryConfig
+metadata:
+  name: local-cluster-discovery
+  namespace: agentregistry
+spec:
+  environments:
+    - name: local
+      cluster:
+        name: local
+        useWorkloadIdentity: false   # локальний кластер — не потрібен
+      provider: ""                   # порожньо для in-cluster
+      discoveryEnabled: true
+      namespaces:
+        - kagent                     # твій агент живе тут
+      resourceTypes:
+        - Agent
+        - MCPServer
+        - ModelConfig
+      labels:
+        environment: local
