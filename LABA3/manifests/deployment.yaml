@@ -43,6 +43,16 @@ subjects:
     name: sre-agent
     namespace: kagent-system
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sre-agent-config
+  namespace: kagent-system
+data:
+  OLLAMA_BASE_URL: "http://localhost:11434"
+  OLLAMA_MODEL: "llama3"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger-collector.observability.svc.cluster.local:4317"
+---
 
 apiVersion: apps/v1
 kind: Deployment
@@ -68,9 +78,11 @@ spec:
         prometheus.io/path: "/metrics"
     spec:
       serviceAccountName: sre-agent
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: agent
-          image: serhii1121/myapp:25
+          image: sre-agent:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
