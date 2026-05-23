@@ -94,6 +94,7 @@ curl -X POST http://localhost:8080/v1/agent \
     "stream": false
   }' | jq
 ```
+![Kubernetes Deployment](assets/31.png)
 
 ## Project Structure
 
@@ -201,7 +202,6 @@ kubectl port-forward -n mcpg svc/mcpg-metrics 9090:9090
 # Open http://localhost:9090/metrics
 ```
 
-![MCPG Dashboard](assets/mcpg.png)
 
 ### 3. Qdrant Vector Database
 
@@ -274,7 +274,6 @@ curl -X POST http://localhost:6333/collections/my_collection/points/search \
   }'
 ```
 
-![Qdrant Dashboard](assets/qdrant.png)
 
 ## Screenshots
 
@@ -289,7 +288,6 @@ curl -X POST http://localhost:6333/collections/my_collection/points/search \
 
 ### Deployment and Scaling
 ![Kubernetes Deployment](assets/31.png)
-![Horizontal Scaling](assets/scale.png)
 
 ### Data Operations
 ![Send Data Operation](assets/send_data.png)
