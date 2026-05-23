@@ -1,6 +1,6 @@
-# LABA 3 - SRE Kubernetes Agent
+# LABA 3
 
-AI-powered SRE agent implementing Google A2A Protocol with Agent Card discovery via Well-Known URI.
+Agent implementing Google A2A Protocol with Agent Card discovery via Well-Known URI.
 
 ## Overview
 
