@@ -1,4 +1,4 @@
-# LABA 3
+# LABA 4
 
 Agent implementing Google A2A Protocol with Agent Card discovery via Well-Known URI.
 
@@ -276,6 +276,7 @@ curl -X POST http://localhost:6333/collections/my_collection/points/search \
 
 
 ## Screenshots
+
 
 ### Agent Registry Inventory
 ![Agent Registry Inventory Interface](assets/inv.png)
