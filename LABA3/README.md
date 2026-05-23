@@ -1,4 +1,4 @@
-# SRE Kubernetes Agent
+# LABA 3 - SRE Kubernetes Agent
 
 AI-powered SRE agent implementing Google A2A Protocol with Agent Card discovery via Well-Known URI.
 
@@ -8,12 +8,12 @@ This agent provides Kubernetes cluster management capabilities through a convers
 
 ## Features
 
-- **A2A Protocol Compliance**: Full implementation of Google Agent-to-Agent protocol
-- **Agent Card Discovery**: RFC 8615 Well-Known URI for agent capability discovery
-- **Ollama LLM Backend**: Uses local Ollama instance on host machine
-- **Kubernetes Tools**: kubectl operations, cluster analysis, pod diagnostics
-- **OpenTelemetry Observability**: Distributed tracing with Jaeger
-- **kagent.dev Integration**: CRD with `apiVersion: kagent.dev/v1alpha1`
+- **A2A Protocol Compliance** - Full implementation of Google Agent-to-Agent protocol
+- **Agent Card Discovery** - RFC 8615 Well-Known URI for agent capability discovery
+- **Ollama LLM Backend** - Uses local Ollama instance on host machine
+- **Kubernetes Tools** - kubectl operations, cluster analysis, pod diagnostics
+- **OpenTelemetry Observability** - Distributed tracing with Jaeger
+- **kagent.dev Integration** - CRD with `apiVersion: kagent.dev/v1alpha1`
 
 ## Prerequisites
 
@@ -38,6 +38,7 @@ curl http://localhost:11434/api/tags
 cd agent
 docker build -t sre-agent:latest .
 ```
+
 ### 2. Deploy to Kubernetes
 
 ```bash
@@ -50,6 +51,7 @@ kubectl apply -f manifests/deployment.yaml
 # Apply kagent CRD (if kagent operator is installed)
 kubectl apply -f manifests/agent-crd.yaml
 ```
+
 ### 3. Verify Deployment
 
 ```bash
@@ -62,6 +64,9 @@ kubectl logs -n kagent-system -l app=sre-agent -f
 # Port-forward to access the agent
 kubectl port-forward -n kagent-system svc/sre-agent 8080:8080
 ```
+
+## Agent Card Discovery
+
 ### Get Agent Card
 
 ```bash
@@ -112,6 +117,21 @@ The Agent Card contains:
 }
 ```
 
+## API Endpoints
+
+### GET /.well-known/agent-card.json
+
+Returns the Agent Card with full capability specification.
+
+**Response:** `200 OK`
+```json
+{
+  "$schema": "https://a2a.google/schemas/agent-card/v1",
+  "name": "SRE Kubernetes Agent",
+  ...
+}
+```
+
 ## Using the Agent
 
 ### Example 1: Analyze Cluster Health
@@ -150,18 +170,6 @@ curl -X POST http://localhost:8080/v1/agent \
   }' | jq
 ```
 
-### GET /.well-known/agent-card.json
-
-Returns the Agent Card with full capability specification.
-
-**Response:** `200 OK`
-```json
-{
-  "$schema": "https://a2a.google/schemas/agent-card/v1",
-  "name": "SRE Kubernetes Agent",
-  ...
-}
-```
 ## Project Structure
 
 ```
@@ -181,15 +189,18 @@ LABA3/
     └── agent-crd.yaml           # kagent.dev/v1alpha1 CRD definition
 ```
 
+---
+
 # LABA 3.1 - AI Infrastructure Deployment
 
 ## Overview
 
 This project demonstrates AI infrastructure deployment using Kubernetes, including:
-- **Agent Registry Inventory** - registry for AI agents and resources
-- **MCPG** (MCP Security Governance) - security and management system for MCP
-- **Qdrant** - vector database for AI applications
+- **Agent Registry Inventory** - Registry for AI agents and resources
+- **MCPG** (MCP Security Governance) - Security and management system for MCP
+- **Qdrant** - Vector database for AI applications
 
+## Components
 
 ### 1. Agent Registry Inventory
 
@@ -229,8 +240,9 @@ curl http://localhost:8080/api/v1/agents?capability=text-generation
 
 **Agent Card Example**:
 
+![Agent Registry Inventory](assets/inv.png)
 
-### MCPG (MCP Security Governance)
+### 2. MCPG (MCP Security Governance)
 
 **Purpose**: Security and management system for Model Context Protocol (MCP).
 
@@ -257,12 +269,18 @@ kubectl apply -f k8s/
 kubectl get all -n mcpg
 ```
 
+**Check deployment**:
+```bash
+kubectl get all -n mcpg
+
 # Security metrics
 kubectl port-forward -n mcpg svc/mcpg-metrics 9090:9090
 # Open http://localhost:9090/metrics
 ```
 
-### Qdrant Vector Database
+![MCPG Dashboard](assets/mcpg.png)
+
+### 3. Qdrant Vector Database
 
 **Purpose**: High-performance vector database for storing embeddings and semantic search.
 
@@ -324,3 +342,32 @@ curl -X PUT http://localhost:6333/collections/my_collection/points \
     ]
   }'
 
+# Search for similar vectors
+curl -X POST http://localhost:6333/collections/my_collection/points/search \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "vector": [0.1, 0.2, 0.3, ...],
+    "limit": 10
+  }'
+```
+
+![Qdrant Dashboard](assets/qdrant.png)
+
+## Screenshots
+
+### Agent Registry Inventory
+![Agent Registry Inventory Interface](assets/inv.png)
+
+### MCPG Security Governance
+![MCPG Dashboard](assets/mcpg.png)
+
+### Qdrant Vector Database
+![Qdrant Interface](assets/qdrant.png)
+
+### Deployment and Scaling
+![Kubernetes Deployment](assets/31.png)
+![Horizontal Scaling](assets/scale.png)
+
+### Data Operations
+![Send Data Operation](assets/send_data.png)
+![System Overview](assets/Screenshot_16.png)
