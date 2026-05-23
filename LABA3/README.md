@@ -39,12 +39,9 @@ cd agent
 docker build -t sre-agent:latest .
 ```
 
-### 2. Deploy to Kubernetes
+### 2. Deploy to Kubernetes(abox)
 
 ```bash
-# Deploy observability stack (Jaeger)
-kubectl apply -f manifests/observability.yaml
-
 # Deploy the agent
 kubectl apply -f manifests/deployment.yaml
 
@@ -79,59 +76,6 @@ kubectl run curl --image=curlimages/curl -i --rm --restart=Never -- \
   curl -s http://sre-agent.kagent-system.svc.cluster.local:8080/.well-known/agent-card.json
 ```
 
-### Agent Card Structure
-
-The Agent Card contains:
-
-```json
-{
-  "$schema": "https://a2a.google/schemas/agent-card/v1",
-  "name": "SRE Kubernetes Agent",
-  "version": "1.0.0",
-  "description": "AI-powered SRE agent for Kubernetes",
-  "capabilities": {
-    "streaming": true,
-    "async": true,
-    "observability": {
-      "traces": true,
-      "metrics": true,
-      "logs": true
-    }
-  },
-  "endpoints": {
-    "agent": "http://sre-agent.kagent-system.svc.cluster.local:8080/v1/agent",
-    "health": "http://sre-agent.kagent-system.svc.cluster.local:8080/health",
-    "metrics": "http://sre-agent.kagent-system.svc.cluster.local:8080/metrics"
-  },
-  "tools": [
-    {
-      "name": "kubectl_get",
-      "description": "Get Kubernetes resources",
-      "parameters": {...}
-    },
-    ...
-  ],
-  "authentication": {
-    "type": "bearer"
-  }
-}
-```
-
-## API Endpoints
-
-### GET /.well-known/agent-card.json
-
-Returns the Agent Card with full capability specification.
-
-**Response:** `200 OK`
-```json
-{
-  "$schema": "https://a2a.google/schemas/agent-card/v1",
-  "name": "SRE Kubernetes Agent",
-  ...
-}
-```
-
 ## Using the Agent
 
 ### Example 1: Analyze Cluster Health
@@ -148,25 +92,6 @@ curl -X POST http://localhost:8080/v1/agent \
     ],
     "tools": ["analyze_cluster_health"],
     "stream": false
-  }' | jq
-```
-
-### Example 2: Diagnose Pod Issues
-
-```bash
-curl -X POST http://localhost:8080/v1/agent \
-  -H "Content-Type: application/json" \
-  -d '{
-    "messages": [
-      {
-        "role": "user",
-        "content": "Why is my pod failing?"
-      }
-    ],
-    "context": {
-      "pod_name": "my-app-pod",
-      "namespace": "default"
-    }
   }' | jq
 ```
 
@@ -191,7 +116,7 @@ LABA3/
 
 ---
 
-# LABA 3.1 - AI Infrastructure Deployment
+# AI Infrastructure Deployment
 
 ## Overview
 
@@ -221,6 +146,8 @@ cd agentregistry-inventory
 # Apply manifests
 kubectl apply -f manifests/
 
+Need to add discovery config 3.3/DiscoveryConfig.yaml
+
 # Check status
 kubectl get pods -n agent-registry
 kubectl get svc -n agent-registry
@@ -237,10 +164,6 @@ curl http://localhost:8080/api/v1/agents
 # Search agents by capabilities
 curl http://localhost:8080/api/v1/agents?capability=text-generation
 ```
-
-**Agent Card Example**:
-
-![Agent Registry Inventory](assets/inv.png)
 
 ### 2. MCPG (MCP Security Governance)
 
