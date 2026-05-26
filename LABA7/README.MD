@@ -1,9 +1,5 @@
 # AI Infrastructure Setup — Research & Implementation Guide
 
-> **Context:** Відповіді базуються на реальному production-ready стеку: **kagent** (Kubernetes-native agent framework), **kgateway** (AI gateway від Solo.io), **fastmcp-python**, **vLLM**, **llm-d**.
-> 
-> **Мета:** Дослідження та оцінка підходів до побудови масштабованої AI-інфраструктури з фокусом на resilience, cost optimization та operational excellence.
-
 ## Table of Contents
 
 - [Resilience & Error Handling](#resilience--error-handling)
@@ -28,7 +24,7 @@
 
 ---
 
-## Resilience & Error Handling  
+## Resilience & Error Handling
 
 
 ---
