@@ -39,7 +39,6 @@
 
 **Solution Architecture:**
 
-**Solution Architecture:**
 
 Багаторівневий захист (Defense in Depth):
 
